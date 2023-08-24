@@ -1,6 +1,11 @@
 import React from 'react';
-import { redirect } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { redirect, json } from '@remix-run/node';
+import {
+	useLoaderData,
+	useRouteError,
+	isRouteErrorResponse,
+	Link,
+} from '@remix-run/react';
 import NewNote, { links as newNoteLinks } from '~/components/NewNote';
 import NoteList, { links as noteListLinks } from '../components/NoteList';
 import { getStoredNotes, storeNotes } from '../data/notes';
@@ -24,6 +29,17 @@ export default function NotesPage() {
 // ?this like a GET route?
 export async function loader() {
 	const notes = await getStoredNotes();
+
+	if (!notes || notes.length === 0) {
+		throw json(
+			{ message: 'Could not find any notes.' },
+			{
+				status: 404,
+				statusText: 'Not Found',
+			}
+		);
+	}
+
 	return notes;
 }
 
@@ -59,4 +75,29 @@ export async function action({ request }) {
 
 export function links() {
 	return [...newNoteLinks(), ...noteListLinks()];
+}
+
+export function ErrorBoundary() {
+	const error = useRouteError();
+
+	if (isRouteErrorResponse(error)) {
+		return (
+			<>
+				<NewNote />
+				<p className="info-message">{error.data.message}</p>
+			</>
+		);
+	} else if (error instanceof Error) {
+		return (
+			<main className="error">
+				<h1>Oops, something went wrong!</h1>
+				<p>
+					Back to <Link to="/">safety</Link>!
+				</p>
+
+				<p>The stack trace is:</p>
+				<p>{error.stack}</p>
+			</main>
+		);
+	}
 }

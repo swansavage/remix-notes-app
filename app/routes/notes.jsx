@@ -11,6 +11,7 @@ const dayjs = require('dayjs');
 
 export default function NotesPage() {
 	const notes = useLoaderData();
+
 	return (
 		<main>
 			<NewNote />
@@ -20,12 +21,14 @@ export default function NotesPage() {
 }
 
 // Remix uses loader to get from db - executed on server, never reaches client
+// ?this like a GET route?
 export async function loader() {
 	const notes = await getStoredNotes();
 	return notes;
 }
 
 // Remix uses form submission to add a note, we use an action here
+// ?this is like a POST route?
 export async function action({ request }) {
 	const formData = await request.formData();
 
@@ -37,6 +40,11 @@ export async function action({ request }) {
 	// 	title: formData.get('title'),
 	// 	content: formData.get('content')
 	// }
+
+	// input validation - return error message to user if title too short
+	if (noteData.title.trim().length < 5) {
+		return { message: 'Invalid title - must be at least 5 characters long.' };
+	}
 
 	const existingNotes = await getStoredNotes();
 	noteData.id = uuidv4();

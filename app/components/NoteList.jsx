@@ -13,7 +13,6 @@ function NoteList({ notes }) {
 					<article>
 						<header>
 							<ul className="note-meta">
-								<li>#{index + 1}</li>
 								<li>
 									<time dateTime={note.date}>
 										Created: {dayjs(note.date).calendar()}

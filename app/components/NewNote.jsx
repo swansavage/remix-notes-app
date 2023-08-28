@@ -1,13 +1,23 @@
 import styles from './NewNote.css';
+import { useEffect, useRef } from 'react';
 import { Form, useActionData, useNavigation } from '@remix-run/react';
 
 function NewNote() {
 	const data = useActionData();
 	const navigation = useNavigation();
+	//prettier-ignore
+	let formRef = useRef();
 
 	const isSubmitting = navigation.state === 'submitting';
+
+	useEffect(() => {
+		if (!isSubmitting) {
+			formRef.current?.reset();
+		}
+	}, [isSubmitting]);
+
 	return (
-		<Form method="post" id="note-form">
+		<Form ref={formRef} method="post" id="note-form">
 			{/* conditonally render the validation error message */}
 			{data?.message && <p>{data.message}</p>}
 			<p>

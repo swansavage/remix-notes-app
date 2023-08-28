@@ -28,3 +28,22 @@
     font-size: 1.15rem;
     white-space: pre-wrap;
   }
+
+  .form-actions {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px
+  }
+  
+  .form-actions button {
+    font: inherit;
+    cursor: pointer;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 24px;
+    background-color: var(--color-primary-200);
+    color: var(--color-primary-700);
+    font-weight: bold;
+    font-size: 1.05rem;
+  }

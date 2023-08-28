@@ -48,6 +48,8 @@ export function links() {
 	];
 }
 
-export function meta({ data }) {
+export function meta({ data, matches }) {
+	console.log(data);
+	console.log(matches);
 	return [{ title: data.title }];
 }

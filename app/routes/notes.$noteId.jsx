@@ -3,7 +3,14 @@ import { json, redirect } from '@remix-run/node';
 import styles from '~/styles/note-details.css';
 import { getStoredNotes, storeNotes } from '../data/notes';
 
-export default function NoteDetialsPage() {
+//setup Day.js
+const dayjs = require('dayjs');
+var relativeTime = require('dayjs/plugin/relativeTime');
+var calendar = require('dayjs/plugin/calendar');
+dayjs.extend(calendar);
+dayjs.extend(relativeTime);
+
+export default function NoteDetailsPage() {
 	const note = useLoaderData();
 
 	return (
@@ -12,13 +19,18 @@ export default function NoteDetialsPage() {
 				<nav>
 					<Link to="/notes">Back to all notes</Link>
 				</nav>
+				<p>created {dayjs(note.date).calendar()}</p>
+				{note.editedOn && <p>edited {dayjs(note.editedOn).toNow(true)} ago</p>}
+
 				<h1>{note.title}</h1>
 			</header>
 			<p id="note-details-content">{note.content}</p>
-			<form class="form-actions" method="post">
-				<button name="intent" type="submit" value="edit">
-					Edit
-				</button>
+			<form className="form-actions" method="post">
+				<Link to={`/notes/${note.id}/edit`}>
+					<button name="intent" type="submit" value="edit">
+						Edit
+					</button>
+				</Link>
 				<button name="intent" type="submit" value="delete">
 					Delete
 				</button>

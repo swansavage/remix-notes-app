@@ -1,6 +1,7 @@
 import React from 'react';
 import { redirect, json } from '@remix-run/node';
 import {
+	Outlet,
 	useLoaderData,
 	useRouteError,
 	isRouteErrorResponse,
@@ -13,6 +14,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 //setup Day.js
 const dayjs = require('dayjs');
+var relativeTime = require('dayjs/plugin/relativeTime');
+dayjs.extend(relativeTime);
 
 export default function NotesPage() {
 	const notes = useLoaderData();

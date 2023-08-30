@@ -43,11 +43,11 @@ export async function action({ request, params }) {
 	const form = await request.formData();
 	const intent = form.get('intent');
 
-	// if (intent !== 'delete') {
-	// 	throw new Response(`Unknown intent "${intent}" - Not supported`, {
-	// 		status: 400,
-	// 	});
-	// }
+	if (intent !== 'delete') {
+		throw new Response(`Unknown intent "${intent}" - Not supported`, {
+			status: 400,
+		});
+	}
 
 	const notes = await getStoredNotes();
 	const noteId = params.noteId;
@@ -58,11 +58,6 @@ export async function action({ request, params }) {
 		await storeNotes(filteredNotes);
 
 		console.log('deleting!');
-		return redirect('/notes');
-	}
-
-	if (intent === 'edit') {
-		console.log('editing!');
 		return redirect('/notes');
 	}
 }

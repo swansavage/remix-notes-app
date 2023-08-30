@@ -18,6 +18,13 @@ function EditNote({ note }) {
 		}
 	}, [isSubmitting]);
 
+	const saveText =
+		navigation.state === 'submitting'
+			? 'Saving...'
+			: navigation.state === 'loading'
+			? 'Saved!'
+			: false;
+
 	return (
 		<Form ref={formRef} method="post" id="note-form">
 			{/* conditonally render the validation error message */}
@@ -46,8 +53,8 @@ function EditNote({ note }) {
 				/>
 			</p>
 			<div className="form-actions">
-				<button disabled={isSubmitting}>
-					{isSubmitting ? 'Saving...' : 'Save Note'}
+				<button type="submit" disabled={saveText}>
+					{saveText ? saveText : 'Save Note'}
 				</button>
 			</div>
 		</Form>
